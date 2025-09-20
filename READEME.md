@@ -1,5 +1,9 @@
+# Nodemon
+
 - We can use nodemon which will automatically refresh the server whenever we make any changes
 - we don't need to manually close and start the server again and again
+
+# Creating an express server
 
 - we need to import express from express to create a server
 
@@ -12,6 +16,8 @@
 - to access this server we need to use listen(port) method with portnumber in parenthesis, like
 
   - app.listen(3001);
+
+# Request handlers
 
 - After this we need to handle the request for that we have use() method
 - which takes request and respone where we can use like function(req, res) or
@@ -27,3 +33,47 @@
     res.send("Hello from test)
     })
 - this will print the message only if we go to {localhost:portNumber/test} route
+
+# Routing in Node
+
+- order of code in NodeJS matters for routing like
+
+  - app.use("/", (req, res) => {
+    res.send("welcome to dashboard);
+    })
+
+  - app.use("/user", (req, res) => {
+    res.send("welcome to user); // here we will still get the above message that is "welcome to dashboard"
+    })
+
+This is because order of the code
+
+# HTTP Methods
+
+- Get
+
+  - app.get("/user", (req, res) => {
+    res.send("Get method call");
+    })
+
+- Post
+
+  - app.post("/user", (req, res) => {
+    res.send("post method called");
+    })
+
+- Delete
+
+  - app.delete("/user", (req, res) => {
+    res.send("Delete method called");
+    })
+
+- Put
+  app.put("/user", (req, res) => {
+  res.send("Put method called")
+  })
+
+- Patch
+  - app.patch("/user",(req, res) => {
+    res.send("Patch method called")
+    })

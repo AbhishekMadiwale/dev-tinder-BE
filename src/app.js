@@ -13,14 +13,32 @@ app.listen(3000, () => {
 
 // After this we need to handle the request for that we have use() method
 // which takes request and respone like
-app.use("/dashboard", (req, res) => {
-  res.send("welcome to dashboard");
+
+// get keyword will match exact route
+app.get("/user", (req, res) => {
+  res.send({ firstName: "Abhishek ", lastName: "Madiwale" });
 });
 
+// we are making post call
+app.post("/user", (req, res) => {
+  console.log("Post call ");
+  res.send("Data successfully saved to DB");
+});
+
+app.delete("/user", (req, res) => {
+  console.log("delete call");
+  res.send("User has been deleted");
+});
+
+app.put("/user", (req, res) => {
+  res.send("Put method called successfully");
+});
+
+app.patch("/user", (req, res) => {
+  res.send("Patch method called");
+});
+
+// All the HTTP methods are handled inside use
 app.use("/test", (req, res) => {
   res.send("hello from test");
-});
-
-app.use("/hello", (req, res) => {
-  res.send("Hello from hello");
 });
