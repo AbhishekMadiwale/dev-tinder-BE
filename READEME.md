@@ -77,3 +77,19 @@ This is because order of the code
   - app.patch("/user",(req, res) => {
     res.send("Patch method called")
     })
+
+# MongoDB
+
+- We need to create a cluster here inside this cluster we will create Database
+- we will connect the cluster in compass, if u face issue with connection to compass, sync your IP on mongoDB
+  dasboard.
+- after this install mongoose library
+
+# Mongoose
+
+- we use to write schemas for MongoDB
+- before listening the server, first connect to db
+  - mongoose.connect() this function we will use
+  - inside this function we need to pass the connection string from mongodDB dashboard, inside this string at the last we will need to give the database name inside our cluster
+  - like, cluster name Movie, database name will be like horror or thriller
+    "connect-movie/thriller"
