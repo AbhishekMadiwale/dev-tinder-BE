@@ -34,6 +34,9 @@
     })
 - this will print the message only if we go to {localhost:portNumber/test} route
 
+- We can get the express middleware from app.use(express.json()), with this we are making the data dynamic
+  and we can add custom input inside the json under raw and json format.
+
 # Routing in Node
 
 - order of code in NodeJS matters for routing like
