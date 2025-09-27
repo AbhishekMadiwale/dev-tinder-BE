@@ -8,13 +8,10 @@ const User = require("./models/user");
 // we are creating a new server on express js
 const app = express();
 
+app.use(express.json());
+
 app.post("/signup", async (req, res) => {
-  const user = new User({
-    firstName: "Virat",
-    lastName: "Kohli",
-    password: "Password@123",
-    email: "virat.kohli@yahoo.com",
-  });
+  const user = new User(req.body);
 
   try {
     await user.save();
