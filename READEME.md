@@ -96,3 +96,5 @@ This is because order of the code
   - inside this function we need to pass the connection string from mongodDB dashboard, inside this string at the last we will need to give the database name inside our cluster
   - like, cluster name Movie, database name will be like horror or thriller
     "connect-movie/thriller"
+- find() this will give us the users matching with the condition, multiple data will get
+- findOne() this will give us the first record from multiple users with same search condition
