@@ -17,7 +17,7 @@ app.post("/signup", async (req, res) => {
     await user.save();
     res.send("User addedd successfully");
   } catch (err) {
-    res.send(400).send("Error in adding user: " + err.message);
+    res.status(400).send("Error in adding user: " + err.message);
   }
 });
 
@@ -42,6 +42,30 @@ app.get("/feed", async (req, res) => {
     res.send(users);
   } catch {
     res.status(404).send("Something went wrong");
+  }
+});
+
+app.delete("/user", async (req, res) => {
+  const userID = req.body.userId;
+  const user = await User.findOneAndDelete(userID);
+
+  if (!user) {
+    res.status(404).send("user not found");
+  } else {
+    res.status(200).send("User deleted successfully");
+  }
+});
+
+app.patch("/user", async (req, res) => {
+  const userEmail = req.body.emailid;
+  const data = req.body;
+  try {
+    await User.findOneAndUpdate({ emailid: userEmail }, data, {
+      runValidators: true,
+    });
+    res.send("User is updated");
+  } catch (err) {
+    res.status(400).send("Updated info is wrong:" + err.message);
   }
 });
 

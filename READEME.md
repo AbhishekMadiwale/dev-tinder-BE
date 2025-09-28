@@ -98,3 +98,5 @@ This is because order of the code
     "connect-movie/thriller"
 - find() this will give us the users matching with the condition, multiple data will get
 - findOne() this will give us the first record from multiple users with same search condition
+- Implemented deleteByID() and updateById() from mongoose
+- Data validation implemented using mongoose schema types
