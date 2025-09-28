@@ -4,6 +4,7 @@ const connectDB = require("./config/database");
 const User = require("./models/user");
 const { validateSignUpData } = require("./utils/validation");
 const bcrypt = require("bcrypt");
+const validator = require("validator");
 
 // Creating a new instance of expressJS application or
 // we are creating a new server on express js
@@ -32,6 +33,31 @@ app.post("/signup", async (req, res) => {
 
     await user.save();
     res.send("User added successfully");
+  } catch (err) {
+    res.status(400).send("ERROR: " + err.message);
+  }
+});
+
+app.post("/login", async (req, res) => {
+  try {
+    const { emailId, password } = req.body;
+    if (!validator.isEmail(emailId)) {
+      throw new Error("Please check the emailID");
+    }
+
+    const user = await User.findOne({ emailId: emailId });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (isPasswordValid) {
+      res.send("Login Successful");
+    } else {
+      throw new Error("check password");
+    }
   } catch (err) {
     res.status(400).send("ERROR: " + err.message);
   }
