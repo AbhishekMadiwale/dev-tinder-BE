@@ -66,14 +66,13 @@ app.post("/login", async (req, res) => {
       throw new Error("User not found");
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = await user.validatePassword(password);
 
     if (isPasswordValid) {
       // here we are creating a cookie on Login API
 
-      const token = await jwt.sign({ _id: user.id }, "DEV@Tinder$790", {
-        expiresIn: "1d",
-      });
+      const token = await user.getJWT();
+
       console.log(token);
       res.cookie("token", token);
       res.send("Login Successful");
