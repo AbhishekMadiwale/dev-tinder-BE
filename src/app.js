@@ -18,6 +18,9 @@ const cookieParser = require("cookie-parser");
 // Imporint webtoken to create and verify the token
 const jwt = require("jsonwebtoken");
 
+// Getting the middleware
+const { userAuth } = require("./middleware/auth");
+
 // importing the express json middleware to parse the incoming request body as JSON
 app.use(express.json());
 
@@ -68,7 +71,9 @@ app.post("/login", async (req, res) => {
     if (isPasswordValid) {
       // here we are creating a cookie on Login API
 
-      const token = await jwt.sign({ _id: user.id }, "DEV@Tinder$790");
+      const token = await jwt.sign({ _id: user.id }, "DEV@Tinder$790", {
+        expiresIn: "1d",
+      });
       console.log(token);
       res.cookie("token", token);
       res.send("Login Successful");
@@ -80,25 +85,11 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.post("/profile", async (req, res) => {
+app.post("/profile", userAuth, async (req, res) => {
   // On profile API we are reading the cookie
   // to read the cookie we are using cookie-parser as a middleware
   try {
-    const cookies = req.cookies;
-
-    const { token } = cookies;
-    if (!token) {
-      throw new Error("Invalid Token");
-    }
-
-    const decodedMessage = await jwt.verify(token, "DEV@Tinder$790");
-    const { _id } = decodedMessage;
-    console.log("Loggedin user is: " + _id);
-
-    const user = await User.findById(_id);
-    if (!user) {
-      throw new Error("User not found");
-    }
+    const user = req.user;
     res.send(user);
 
     res.send("Reading cookies");
@@ -107,74 +98,13 @@ app.post("/profile", async (req, res) => {
   }
 });
 
-app.get("/user", async (req, res) => {
-  const userEmail = req.body.emailid;
-
+app.post("/sendConnectionRequest", userAuth, async (req, res) => {
+  const user = req.user;
+  // Sending the connection request
   try {
-    const users = await User.find({ emailid: userEmail });
-    if (users.length === 0) {
-      res.status(404).send("user not found");
-    } else {
-      res.send(users);
-    }
+    res.send(user.firstName + " sending a connection request");
   } catch (err) {
-    res.status(400).send("something went wrong");
-  }
-});
-
-app.get("/feed", async (req, res) => {
-  try {
-    const users = await User.find({});
-    res.send(users);
-  } catch {
-    res.status(404).send("Something went wrong");
-  }
-});
-
-app.delete("/user", async (req, res) => {
-  const userId = req.body.userId;
-  const user = await User.findOneAndDelete(userId);
-
-  if (!user) {
-    res.status(404).send("user not found");
-  } else {
-    res.status(200).send("User deleted successfully");
-  }
-});
-
-app.patch("/user/:userId", async (req, res) => {
-  // const userId = req.body.userId;
-  const userId = req.params?.userId;
-  const data = req.body;
-
-  try {
-    const ALLOWED_UPDATED = [
-      "photoUrl",
-      "about",
-      "gender",
-      "age",
-      "skills",
-      "password",
-    ];
-
-    const isUpdatedAllowed = Object.keys(data).every((k) =>
-      ALLOWED_UPDATED.includes(k)
-    );
-
-    if (!isUpdatedAllowed) {
-      res.status(400).send("Updates are not valid");
-    }
-
-    if (data.skills && data?.skills.length > 10) {
-      throw new Error("Skills cannot be more than 10");
-    }
-    await User.findOneAndUpdate({ _id: userId }, data, {
-      runValidators: true,
-    });
-
-    res.send("User is updated");
-  } catch (err) {
-    res.status(400).send("Updated info is wrong: " + err.message);
+    res.status(400).send("ERROR: " + err.message);
   }
 });
 
