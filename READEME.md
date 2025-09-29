@@ -100,3 +100,6 @@ This is because order of the code
 - findOne() this will give us the first record from multiple users with same search condition
 - Implemented deleteByID() and updateById() from mongoose
 - Data validation implemented using mongoose schema types
+- JWT tokens implemented
+- new profile and sendConnectionRequest API implemented
+- code cleanup is done
